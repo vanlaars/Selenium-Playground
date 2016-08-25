@@ -21,4 +21,10 @@ public interface Configuration {
         @Property("script.timeout")
         int getScriptTimeout();
 
+        @Property("driver.type")
+        String getDriver();
+
+        @Property("remote.url")
+        String getRemoteUrl();
+
 }
