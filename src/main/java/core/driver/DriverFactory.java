@@ -41,7 +41,13 @@ public class DriverFactory {
             LoggingPreferences logPrefs = new LoggingPreferences();
             logPrefs.enable(LogType.BROWSER, Level.ALL);
             capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
-            return getDriverSelect(capabilities);
+            URL url = null;
+            try {
+                url = new URL(config.getRemoteUrl());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            return new RemoteWebDriver(url, capabilities);
         }
     };
 
