@@ -29,7 +29,7 @@ public class uj_simpleCart extends BaseTest {
     }
 
     @Test
-    public void conditions_test() throws InterruptedException {
+    public void conditions_test()  {
         final String force_404 = "/404";
         final String url = "https://uk.int-milan-hotels.com";
         final String MVT_ALERT_HOME_PAGE = "2176.1";
@@ -46,7 +46,7 @@ public class uj_simpleCart extends BaseTest {
     }
 
     @Test
-    public void uj_search_happy() throws InterruptedException {
+    public void uj_search_happy()  {
         page_Home().wait_for_page().and().search(test_data);
         sr_page.check_result_found(test_data).and().click_text(test_data.getSubsection());
         header.navigate_to_sign_in();

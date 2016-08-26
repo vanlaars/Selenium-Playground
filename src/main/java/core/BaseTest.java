@@ -3,8 +3,9 @@ package core;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import core.advancedPO.AdvancedPageFactory;
-import core.config.Configuration;
 import core.driver.DriverFactory;
 import core.utils.StringUtils;
 import org.apache.commons.io.FileUtils;
@@ -25,7 +26,6 @@ import page_objects.pages.HomePage;
 import page_objects.pages.SearchResultPage;
 import page_objects.pages.SignIn_Page;
 import page_objects.variants.searchAvancedPO.ISearchPage;
-import ru.qatools.properties.PropertyLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,12 +69,10 @@ public class BaseTest {
     // Utils
     public StringUtils stringUtils = new StringUtils();
     private static Logger logger = Logger.getLogger("BaseTest");
-    private static Configuration configuration;
-
+    private static Config conf = ConfigFactory.load();
 
     @BeforeMethod
     public void setup_base() {
-        config_loader();
         set_driver();
         init_pages();
     }
@@ -100,8 +98,7 @@ public class BaseTest {
         this.driver =  DriverFactory.getInstance().getDriver();
         this.driver.manage().window().maximize();
         setTimeouts();
-        logger.info("Going to open : " + getConfiguration().getHost());
-        this.driver.get(getConfiguration().getHost());
+        this.driver.get(conf.getString("environment.url"));
     }
 
 
@@ -119,9 +116,9 @@ public class BaseTest {
     // ============ TIMEOUTS ====================
 
     private void setTimeouts() {
-        this.driver.manage().timeouts().implicitlyWait(getConfiguration().getElementTimout(), TimeUnit.SECONDS);
-        this.driver.manage().timeouts().pageLoadTimeout(getConfiguration().getPageLoadTimeout(), TimeUnit.SECONDS);
-        this.driver.manage().timeouts().setScriptTimeout(getConfiguration().getScriptTimeout(), TimeUnit.SECONDS);
+        this.driver.manage().timeouts().implicitlyWait(conf.getLong("driver.timeout.element"), TimeUnit.SECONDS);
+        this.driver.manage().timeouts().pageLoadTimeout(conf.getLong("driver.timeout.page"), TimeUnit.SECONDS);
+        this.driver.manage().timeouts().setScriptTimeout(conf.getLong("driver.timeout.script"), TimeUnit.SECONDS);
     }
 
     // ========= UTILS & CONFIG ==============
@@ -147,14 +144,6 @@ public class BaseTest {
         }
     }
 
-    public static Configuration getConfiguration() {
-        return configuration;
-    }
-
-    private void config_loader() {
-        configuration = PropertyLoader.newInstance()
-                .populate(Configuration.class);
-    }
 
     public WebDriver getDriver(){
         return DriverFactory.getInstance().getDriver();
@@ -163,7 +152,6 @@ public class BaseTest {
     public void analyzeLog(ITestResult result) {
         ExtentReports extent = new ExtentReports("./target/test-output/TestReport.html" , false);
         ExtentTest test = extent.startTest(result.getName(), "We need to check the browser logs");
-        logger.info("Analyzing logs");
         LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
             logger.info(new Date(entry.getTimestamp()) + " " + entry.getLevel() + " " + entry.getMessage());

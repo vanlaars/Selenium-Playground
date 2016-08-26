@@ -1,6 +1,7 @@
 package core.driver;
 
-import core.config.Configuration;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.logging.LogType;
@@ -19,7 +20,8 @@ import java.util.logging.Level;
 public class DriverFactory {
 
     private static DriverFactory instance = new DriverFactory();
-    private static Configuration config;
+    WebDriver returnedDriver;
+
 
     private DriverFactory()
     {
@@ -36,39 +38,42 @@ public class DriverFactory {
         @Override
         protected WebDriver initialValue()
         {
-            System.out.println("************ We got this shit , FUCKAH" + config.getDriver());
-            DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-            LoggingPreferences logPrefs = new LoggingPreferences();
-            logPrefs.enable(LogType.BROWSER, Level.ALL);
-            capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
-            URL url = null;
-            try {
-                url = new URL(config.getRemoteUrl());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            return new RemoteWebDriver(url, capabilities);
+            Config conf = ConfigFactory.load();
+            returnedDriver = selectDriver(conf.getString("driver.browser"));
+            return returnedDriver;
         }
     };
 
-    private WebDriver getDriverSelect(DesiredCapabilities capabilities) {
-        WebDriver driver_selected = null;
-        System.out.println("************ We got this shit , FUCKAH" + config.getDriver());
-        switch (config.getDriver()) {
-            case "chrome":
-                driver_selected = new ChromeDriver(capabilities); // can be replaced with other browser drivers
-                break;
-            case "remote":
-                try {
-                    driver_selected = new RemoteWebDriver(new URL(config.getRemoteUrl()), capabilities);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-            default:
-                throw new IllegalArgumentException("The config or override value was invalid, we received as a browser  " + config.getDriver());
+    private WebDriver selectDriver(String browserSettings) {
+        WebDriver returningDriver = null;
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.BROWSER, Level.ALL);
+        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+
+        System.out.println("Our config is " + browserSettings);
+
+        if (browserSettings.equals("chrome")){
+            returningDriver = new ChromeDriver(capabilities);
         }
-        return driver_selected;
+
+        if (browserSettings.equals("remote")){
+            returningDriver = new RemoteWebDriver(getRemoteUrl(), capabilities);
+        }
+
+        return returningDriver;
     }
+
+    private URL getRemoteUrl(){
+        URL url = null;
+        try {
+            url = new URL("http://localhost:4444/wd/hub");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
 
     public WebDriver getDriver() // call this method to get the driver object and launch the browser
     {

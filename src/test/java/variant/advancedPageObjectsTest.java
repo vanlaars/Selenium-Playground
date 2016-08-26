@@ -16,7 +16,7 @@ public class advancedPageObjectsTest extends BaseTest {
 
     private static final String URL_EXPECTED = "https://en.wikipedia.org/wiki/Cheese";
     private static final String SEARCH_QUERY = "Cheese - Wikipedia, the free encyclopedia";
-    private static final String MAKE_URL_FAIL = " ** this_makes_it_fail";
+    private static final String MAKE_URL_FAIL = "FAIL";
 
 
 
