@@ -18,19 +18,18 @@ public class advancedPageObjectsTest extends BaseTest {
     private static final String SEARCH_QUERY = "Cheese - Wikipedia, the free encyclopedia";
 
 
-    @Test(description = "Advanced PageObject Test with jUnit assertion navigation to Google", dataProvider = "URLS")
-    public void test_advanced_page_factory(String url) {
+    @Test(description = "Advanced PageObject Test with jUnit assertion navigation to Google")
+    public void test_advanced_page_factory() {
+        String url = "http://www.google.com";
+//        String url = "http://www.bing.com";
+
         getDriver().get(url);
 
         getAdvancedSearchPage().search(SEARCH_QUERY);
 
         // jUnit assertion
-        Assert.assertEquals("The url should be correct", URL_EXPECTED, getDriver().getCurrentUrl());
-    }
-
-    @DataProvider(name = "URLS")
-    public static Object[][] urls_advanced_page_factory() {
-        return new Object[][] {{"http://www.google.com"}, {"http://www.bing.com"}};
+        String current_url = getDriver().getCurrentUrl();
+        Assert.assertEquals("The url is " + current_url + " and should be " + URL_EXPECTED, URL_EXPECTED, current_url);
     }
 
 }

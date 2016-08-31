@@ -24,12 +24,13 @@ public class uj_simpleCart extends BaseTest {
 
     @Test
     public void uj_search_happy()  {
-        final String expected = "com/XXX_hotel/details.html";
-        final String actual_url;
         page_Home().wait_for_page().and().search(search_test_data);
         page_Search_Result().wait_for_page().and().select_deal_of_the_day().and().switch_to_tab(1);
 
-        actual_url = getDriver().getCurrentUrl();
+        // Assertion
+        final String actual_url = getDriver().getCurrentUrl();
+        final String expected = "com/XXX_hotel/details.html";
+
         Assert.assertTrue(actual_url.contains(expected), "URL should contain " + expected + " But was " + actual_url);
 
     }

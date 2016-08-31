@@ -4,8 +4,8 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import core.advancedPO.AdvancedPageFactory;
 import core.driver.DriverFactory;
+import core.utils.BrowserLogsLogger;
 import core.utils.StringUtils;
-import core.utils.TestLogger;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.OutputType;
@@ -15,7 +15,6 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogType;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import page_objects.BasePage;
 import page_objects.modules.HeaderModule;
@@ -67,7 +66,7 @@ public class BaseTest {
     public StringUtils stringUtils = new StringUtils();
     private static Logger logger = Logger.getLogger("BaseTest");
     private static Config conf = ConfigFactory.load();
-    private TestLogger loggerTest = new TestLogger();
+    private BrowserLogsLogger loggerTest = new BrowserLogsLogger();
 
     @BeforeMethod
     public void setup_base() {
