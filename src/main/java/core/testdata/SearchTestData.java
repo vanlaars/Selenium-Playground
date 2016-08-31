@@ -14,15 +14,19 @@ public class SearchTestData {
     private String check_in;
     private String occupancy;
 
-    public SearchTestData(String destination, String check_out, String occupancy) {
-        Date today = new Date();
+    public SearchTestData(String destination, int check_out, String occupancy) {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, 7);
-        Date tommrrow = cal.getTime();
+
+        // print current date
+        Date checkIn = cal.getTime();
+
+        // add 7 days to the calendar
+        cal.add(Calendar.DATE, check_out);
+        Date checkOut = cal.getTime();
 
         this.destination = destination;
-        this.check_in = toddMMyy(today);
-        this.check_out = toddMMyy(tommrrow);
+        this.check_in = toddMMyy(checkIn);
+        this.check_out = toddMMyy(checkOut);
         this.occupancy = occupancy;
     }
 
@@ -45,7 +49,7 @@ public class SearchTestData {
     }
 
     private static String toddMMyy(Date day){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String date = formatter.format(day);
         return date;
     }
@@ -54,8 +58,8 @@ public class SearchTestData {
     public String toString() {
         return "SearchTestData{" +
                 "destination='" + destination + '\'' +
-                ", check_out='" + check_out + '\'' +
                 ", check_in='" + check_in + '\'' +
+                ", check_out='" + check_out + '\'' +
                 ", occupancy='" + occupancy + '\'' +
                 '}';
     }

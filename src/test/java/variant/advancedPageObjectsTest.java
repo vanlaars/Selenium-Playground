@@ -30,7 +30,7 @@ public class advancedPageObjectsTest extends BaseTest {
 
     @DataProvider(name = "URLS")
     public static Object[][] urls_advanced_page_factory() {
-        return new Object[][] {{"http://www.google.com"}, {"http://www.yahoo.com"}};
+        return new Object[][] {{"http://www.google.com"}, {"http://www.bing.com"}};
     }
 
 }

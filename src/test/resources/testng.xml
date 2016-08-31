@@ -11,6 +11,7 @@
         <classes>
             <class name="user_journey.uj_simpleCart" />
             <class name="variant.advancedPageObjectsTest" />
+            <class name="variant.conditionsTest" />
         </classes>
 
     </test>

@@ -40,6 +40,7 @@ public class DriverFactory {
         {
             Config conf = ConfigFactory.load();
             returnedDriver = selectDriver(conf.getString("driver.browser"));
+            
             return returnedDriver;
         }
     };
@@ -58,8 +59,6 @@ public class DriverFactory {
     private WebDriver selectDriver(String browserSettings) {
 //        WebDriver returningDriver = null;
         DesiredCapabilities capabilities = getDesiredCapabilities();
-
-
         switch (browserSettings) {
             case "chrome":
                 return new ChromeDriver(capabilities);

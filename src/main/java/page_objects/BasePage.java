@@ -1,6 +1,7 @@
 package page_objects;
 
 import com.relevantcodes.extentreports.ExtentReports;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
@@ -59,19 +60,27 @@ public class BasePage {
         dropdown.selectByVisibleText(value);
     }
 
+    public void clear_field(By element){
+        getDriver().findElement(element).clear();
+    }
+
     public void select_by_index(By element, int value){
         Select dropdown = new Select(driver.findElement(element));
         dropdown.selectByIndex(value);
     }
 
     public void wait_for_element(By element){
-        WebDriverWait wait = new WebDriverWait(driver, 30);
+        WebDriverWait wait = new WebDriverWait(driver, 60);
         wait.until(ExpectedConditions.visibilityOfElementLocated(element));
     }
 
     public void switch_to_tab(int tab){
         ArrayList<String> tabs2 = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(tabs2.get(tab));
+    }
+
+    public void send_escape_key(By element){
+        driver.findElement(element).sendKeys(Keys.ESCAPE);
     }
 
     public static WebDriver getDriver() {

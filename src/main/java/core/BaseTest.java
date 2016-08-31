@@ -1,6 +1,5 @@
 package core;
 
-import com.relevantcodes.extentreports.LogStatus;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import core.advancedPO.AdvancedPageFactory;
@@ -13,7 +12,6 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -27,9 +25,7 @@ import page_objects.pages.SignIn_Page;
 import page_objects.variants.searchAvancedPO.ISearchPage;
 
 import java.io.File;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 
 
@@ -90,12 +86,6 @@ public class BaseTest {
         DriverFactory.getInstance().removeDriver();
     }
 
-    @AfterSuite(alwaysRun = true)
-    public void teardown_suite(ITestResult result)  {
-        // close the driver..
-        DriverFactory.getInstance().removeDriver();
-    }
-
     // ========= SET DRIVER ==============
     private void set_driver() {
         this.driver = DriverFactory.getInstance().getDriver();
@@ -152,12 +142,13 @@ public class BaseTest {
         return DriverFactory.getInstance().getDriver();
     }
 
-    public void analyzeLog(ITestResult result)  {
+    private void analyzeLog(ITestResult result)  {
         LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
         loggerTest.log_me(result.getName(), logEntries);
     }
 
     public void force_mvt(String variant, String url) {
+        logger.info("Forcing MVT " + variant);
         driver.get(url + "?mvariant=" + variant);
     }
 

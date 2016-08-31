@@ -57,7 +57,9 @@ public class HomePage extends BasePage {
 
     public HomePage search(SearchTestData data) {
         type(DESTINATION, data.getDestination() );
-        click(By.xpath(".//*[@id='citysqm-asi0-s0']/td"));
+//        send_escape_key(DESTINATION);
+//        clear_field(CHECK_IN);
+//        clear_field(CHECK_OUT);
         type(CHECK_IN, data.getCheck_in());
         type(CHECK_OUT, data.getCheck_out());
         select(OCCUPANCY, data.getOccupancy());
