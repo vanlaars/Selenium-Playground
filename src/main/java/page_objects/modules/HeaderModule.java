@@ -10,14 +10,16 @@ import page_objects.BasePage;
 public class HeaderModule extends BasePage {
 
 
-    private By my_account = By.id("nav-link-yourAccount");
+    private By my_account = By.id("hdr-signin");
+    private By sign_in = By.id("hdr-account");
 
     public HeaderModule(WebDriver driver) {
         super(driver);
     }
 
     public HeaderModule navigate_to_sign_in(){
-        wait_for_element(my_account);
+        wait_for_element(sign_in);
+        click(sign_in);
         click(my_account);
         return this;
     }

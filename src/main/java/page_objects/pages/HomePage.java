@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import page_objects.BasePage;
-import core.test_manager.domain.TestData;
+import core.testdata.SearchTestData;
 import page_objects.conditions.ConditionsBase;
 
 import java.util.Timer;
@@ -18,6 +18,14 @@ public class HomePage extends BasePage {
 
     private static Logger logger = Logger.getLogger("ConditionsBase");
     private final String PAGE = get_page_name();
+//    2327.0 MVT kller Autosuggest
+
+    private static final By DESTINATION = By.id("qf-0q-destination");
+    private static final By CHECK_IN = By.id("qf-0q-localised-check-in");
+    private static final By CHECK_OUT = By.id("qf-0q-localised-check-out");
+    private static final By OCCUPANCY = By.id("qf-0q-compact-occupancy");
+    private static final By SEARCH_BUTTON = By.xpath(".//*[@id='main-content']/main/div/div/div[1]/div/div[1]/div[1]/div/div/form/fieldset[5]/button");
+
 
 
     private final By search_box = By.id("twotabsearchtextbox");
@@ -47,9 +55,13 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public HomePage search(TestData data) {
-        type(search_box, data.getSearch_criteria() );
-        submit(search_box);
+    public HomePage search(SearchTestData data) {
+        type(DESTINATION, data.getDestination() );
+        click(By.xpath(".//*[@id='citysqm-asi0-s0']/td"));
+        type(CHECK_IN, data.getCheck_in());
+        type(CHECK_OUT, data.getCheck_out());
+        select(OCCUPANCY, data.getOccupancy());
+        click(SEARCH_BUTTON);
         return this;
     }
 

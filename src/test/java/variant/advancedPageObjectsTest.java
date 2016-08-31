@@ -16,8 +16,6 @@ public class advancedPageObjectsTest extends BaseTest {
 
     private static final String URL_EXPECTED = "https://en.wikipedia.org/wiki/Cheese";
     private static final String SEARCH_QUERY = "Cheese - Wikipedia, the free encyclopedia";
-    private static final String MAKE_URL_FAIL = "FAIL";
-
 
 
     @Test(description = "Advanced PageObject Test with jUnit assertion navigation to Google", dataProvider = "URLS")
@@ -27,7 +25,7 @@ public class advancedPageObjectsTest extends BaseTest {
         getAdvancedSearchPage().search(SEARCH_QUERY);
 
         // jUnit assertion
-        Assert.assertEquals("The url should be correct", URL_EXPECTED + MAKE_URL_FAIL, getDriver().getCurrentUrl());
+        Assert.assertEquals("The url should be correct", URL_EXPECTED, getDriver().getCurrentUrl());
     }
 
     @DataProvider(name = "URLS")

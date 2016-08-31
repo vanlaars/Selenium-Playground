@@ -1,13 +1,12 @@
 package core;
 
-import com.relevantcodes.extentreports.ExtentReports;
-import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import core.advancedPO.AdvancedPageFactory;
 import core.driver.DriverFactory;
 import core.utils.StringUtils;
+import core.utils.TestLogger;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.OutputType;
@@ -17,8 +16,8 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import page_objects.BasePage;
 import page_objects.modules.HeaderModule;
@@ -28,10 +27,12 @@ import page_objects.pages.SignIn_Page;
 import page_objects.variants.searchAvancedPO.ISearchPage;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+
+
+
 
 
 /**
@@ -53,11 +54,11 @@ public class BaseTest {
     }
 
 
-    public HomePage page_Home(){
+    public HomePage page_Home() {
         return new HomePage(driver);
     }
 
-    public SearchResultPage page_Search_Result(){
+    public SearchResultPage page_Search_Result() {
         return new SearchResultPage(driver);
     }
 
@@ -70,6 +71,7 @@ public class BaseTest {
     public StringUtils stringUtils = new StringUtils();
     private static Logger logger = Logger.getLogger("BaseTest");
     private static Config conf = ConfigFactory.load();
+    private TestLogger loggerTest = new TestLogger();
 
     @BeforeMethod
     public void setup_base() {
@@ -78,7 +80,7 @@ public class BaseTest {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void teardown_base(ITestResult result) throws IOException {
+    public void teardown_base(ITestResult result)  {
         capture_screenshot(result);
 
         // analyze logs
@@ -88,14 +90,15 @@ public class BaseTest {
         DriverFactory.getInstance().removeDriver();
     }
 
-    @AfterClass
-    public void secure_tear_down(){
+    @AfterSuite(alwaysRun = true)
+    public void teardown_suite(ITestResult result)  {
+        // close the driver..
         DriverFactory.getInstance().removeDriver();
     }
 
     // ========= SET DRIVER ==============
     private void set_driver() {
-        this.driver =  DriverFactory.getInstance().getDriver();
+        this.driver = DriverFactory.getInstance().getDriver();
         this.driver.manage().window().maximize();
         setTimeouts();
         this.driver.get(conf.getString("environment.url"));
@@ -145,29 +148,16 @@ public class BaseTest {
     }
 
 
-    public WebDriver getDriver(){
+    public WebDriver getDriver() {
         return DriverFactory.getInstance().getDriver();
     }
 
-    public void analyzeLog(ITestResult result) {
-        ExtentReports extent = new ExtentReports("./target/test-output/TestReport.html" , false);
-        ExtentTest test = extent.startTest(result.getName(), "We need to check the browser logs");
+    public void analyzeLog(ITestResult result)  {
         LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
-        for (LogEntry entry : logEntries) {
-            logger.info(new Date(entry.getTimestamp()) + " " + entry.getLevel() + " " + entry.getMessage());
-            test.log(LogStatus.INFO, new Date(entry.getTimestamp()) + " " + entry.getLevel() + " " + entry.getMessage());
-
-            //do something useful with the data
-            if (entry.getLevel() == Level.SEVERE && entry.getMessage().contains("404")){
-                logger.info("404 detected in the browser logs " + entry.getMessage() + " during test " + result.getName());
-                test.log(LogStatus.WARNING, "404 detected in the browser logs " + entry.getMessage() + " during test ");
-            }
-        }
-        extent.endTest(test);
-        extent.flush();
+        loggerTest.log_me(result.getName(), logEntries);
     }
 
-    public void force_mvt(String variant, String url){
+    public void force_mvt(String variant, String url) {
         driver.get(url + "?mvariant=" + variant);
     }
 

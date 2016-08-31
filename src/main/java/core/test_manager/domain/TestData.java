@@ -10,7 +10,7 @@ public class TestData {
     private String password;
     private String subsection;
 
-    // ToDo: Create builder pattern, maybe even with a list of items to buy. Build Search, Build User
+    // ToDo: Create builder pattern, maybe even with a list of items to buy. Build SearchTestData, Build User
     // ToDo: http://howtodoinjava.com/design-patterns/creational/builder-pattern-in-java/
 
     public TestData(String search_criteria, String user_name, String password, String subsection) {

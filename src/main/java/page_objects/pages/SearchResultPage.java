@@ -2,10 +2,14 @@ package page_objects.pages;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import page_objects.BasePage;
 import core.test_manager.domain.TestData;
+import page_objects.conditions.ConditionsBase;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -14,29 +18,39 @@ import java.util.concurrent.TimeUnit;
 public class SearchResultPage extends BasePage {
 
     protected WebDriver driver;
-    private static final By no_result = By.cssSelector("#noResultsTitle");
-    private static final By search_results_for_criteria = By.id("s-result-count");
+    private final ConditionsBase conditions = new ConditionsBase(getDriver());
+
+    private static final By SEARCH_RESUTLS = By.id("search-results");
+
 
     public SearchResultPage(WebDriver driver) {
         super(driver);
         this.driver = driver;
     }
 
-    public void check_nothing_found(){
-        Assert.assertTrue(get_text_from_element(no_result).contains("did not match any products."));
-    }
-
-    public SearchResultPage check_result_found(TestData test_data) {
-        wait_for_element(search_results_for_criteria);
-        Assert.assertTrue(get_text_from_element(search_results_for_criteria).contains(test_data.getSearch_criteria()));
-        return this;
-    }
-
     public SearchResultPage and() {
         return this;
     }
 
-    public void wait_for_page() {
-        System.out.println("We are going to wait for page");
+    public SearchResultPage wait_for_page() {
+        wait_for_element(SEARCH_RESUTLS);
+        conditions.condition_common_check(get_page_name());
+        return this;
+    }
+
+    public SearchResultPage select_random_hotel(){
+        System.out.println("We need to implement this");
+
+        boolean stop_parsing;
+        do {
+
+
+        } while (stop_parsing = true);
+        return this;
+    }
+
+    public SearchResultPage select_hotel_by_name(String hotelName){
+        click_text(hotelName);
+        return this;
     }
 }

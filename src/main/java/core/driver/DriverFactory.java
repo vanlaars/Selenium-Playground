@@ -44,37 +44,6 @@ public class DriverFactory {
         }
     };
 
-    private WebDriver selectDriver(String browserSettings) {
-        WebDriver returningDriver = null;
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-        LoggingPreferences logPrefs = new LoggingPreferences();
-        logPrefs.enable(LogType.BROWSER, Level.ALL);
-        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
-
-        System.out.println("Our config is " + browserSettings);
-
-        if (browserSettings.equals("chrome")){
-            returningDriver = new ChromeDriver(capabilities);
-        }
-
-        if (browserSettings.equals("remote")){
-            returningDriver = new RemoteWebDriver(getRemoteUrl(), capabilities);
-        }
-
-        return returningDriver;
-    }
-
-    private URL getRemoteUrl(){
-        URL url = null;
-        try {
-            url = new URL("http://localhost:4444/wd/hub");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return url;
-    }
-
-
     public WebDriver getDriver() // call this method to get the driver object and launch the browser
     {
         return driver.get();
@@ -85,4 +54,41 @@ public class DriverFactory {
         driver.get().quit();
         driver.remove();
     }
+
+    private WebDriver selectDriver(String browserSettings) {
+//        WebDriver returningDriver = null;
+        DesiredCapabilities capabilities = getDesiredCapabilities();
+
+
+        switch (browserSettings) {
+            case "chrome":
+                return new ChromeDriver(capabilities);
+            case "remote":
+                return new RemoteWebDriver(getRemoteUrl(), capabilities);
+            default:
+                throw new IllegalArgumentException("Invalid browser : " + browserSettings);
+        }
+
+    }
+
+    private DesiredCapabilities getDesiredCapabilities() {
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.BROWSER, Level.ALL);
+        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+        return capabilities;
+    }
+
+    private URL getRemoteUrl(){
+        Config conf = ConfigFactory.load();
+
+        URL url = null;
+        try {
+            url = new URL(conf.getString("driver.url"));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
 }
