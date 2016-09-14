@@ -1,6 +1,7 @@
 package variant;
 
 import org.junit.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import core.BaseTest;
@@ -20,8 +21,8 @@ public class advancedPageObjectsTest extends BaseTest {
 
     @Test(description = "Advanced PageObject Test with jUnit assertion navigation to Google")
     public void test_advanced_page_factory() {
-        String url = "http://www.google.com";
-//        String url = "http://www.bing.com";
+//        String url = "http://www.google.com";
+        String url = "http://www.bing.com";
 
         getDriver().get(url);
 

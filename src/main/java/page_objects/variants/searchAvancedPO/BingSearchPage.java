@@ -18,9 +18,8 @@ public class BingSearchPage extends BasePage implements ISearchPage  {
 
     public BingSearchPage(WebDriver driver) {
         super(driver);
-        if (!driver.findElement(search_box).isDisplayed()) {
+        if (!driver.findElement(search_box).isDisplayed())
             throw new IllegalStateException("This is not the Yahoo Page");
-        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package page_objects.variants.searchAvancedPO;
 /**
  * Created by svanlaar on 25/04/2016.
  */
+@FunctionalInterface
 public interface ISearchPage {
 
     /**
@@ -11,5 +12,5 @@ public interface ISearchPage {
      * @param query
      *            Query as String.
      */
-    public abstract void search(String query);
+    void search(String query);
 }

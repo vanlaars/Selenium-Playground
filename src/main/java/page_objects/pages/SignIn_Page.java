@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import page_objects.BasePage;
 import core.test_manager.domain.TestData;
+import ru.yandex.qatools.allure.annotations.Step;
 
 /**
  * Created by svanlaar on 02/03/2016.
@@ -21,16 +22,20 @@ public class SignIn_Page extends BasePage {
         super(driver);
     }
 
+    @Step
     public SignIn_Page and() {
         return this;
     }
 
+    @Step
     public SignIn_Page sign_in(TestData data){
         type(login, data.getUser_name());
         type(password, data.getPassword());
         submit(submit_signIn_form);
         return this;
     }
+
+    @Step
     public SignIn_Page check_not_signedIn() {
         Assert.assertTrue("Error message is not displayed", is_displayed(error_message));
         return this;

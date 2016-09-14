@@ -4,6 +4,7 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
@@ -20,7 +21,7 @@ import java.util.logging.Level;
 public class DriverFactory {
 
     private static DriverFactory instance = new DriverFactory();
-    WebDriver returnedDriver;
+    private static WebDriver returnedDriver;
 
 
     private DriverFactory()
@@ -40,7 +41,7 @@ public class DriverFactory {
         {
             Config conf = ConfigFactory.load();
             returnedDriver = selectDriver(conf.getString("driver.browser"));
-            
+            setDriver(returnedDriver);
             return returnedDriver;
         }
     };
@@ -50,13 +51,17 @@ public class DriverFactory {
         return driver.get();
     }
 
+    public void setDriver(WebDriver driverSet){
+        driver.set(driverSet);
+    }
+
     public void removeDriver() // Quits the driver and closes the browser
     {
         driver.get().quit();
         driver.remove();
     }
 
-    private WebDriver selectDriver(String browserSettings) {
+    private static WebDriver selectDriver(String browserSettings) {
 //        WebDriver returningDriver = null;
         DesiredCapabilities capabilities = getDesiredCapabilities();
         switch (browserSettings) {
@@ -64,13 +69,15 @@ public class DriverFactory {
                 return new ChromeDriver(capabilities);
             case "remote":
                 return new RemoteWebDriver(getRemoteUrl(), capabilities);
+            case "htmlunit":
+                return new HtmlUnitDriver();
             default:
                 throw new IllegalArgumentException("Invalid browser : " + browserSettings);
         }
 
     }
 
-    private DesiredCapabilities getDesiredCapabilities() {
+    private static DesiredCapabilities getDesiredCapabilities() {
         DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         LoggingPreferences logPrefs = new LoggingPreferences();
         logPrefs.enable(LogType.BROWSER, Level.ALL);
@@ -78,7 +85,7 @@ public class DriverFactory {
         return capabilities;
     }
 
-    private URL getRemoteUrl(){
+    private static URL getRemoteUrl(){
         Config conf = ConfigFactory.load();
 
         URL url = null;

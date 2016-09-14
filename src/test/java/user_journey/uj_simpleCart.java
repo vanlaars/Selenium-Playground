@@ -3,7 +3,6 @@ package user_journey;
 import core.BaseTest;
 import core.testdata.SearchTestData;
 import org.apache.log4j.Logger;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -19,21 +18,25 @@ public class uj_simpleCart extends BaseTest {
 
     @BeforeMethod
     public void setUp(){
-        search_test_data = new SearchTestData("Amsterdam, the Netherlands", 7, "1 room, 1 adult");
+        search_test_data = new SearchTestData("Amsterdam, Netherlands", 7, "1 room, 1 adult");
     }
 
     @Test
-    public void uj_search_happy()  {
+    public void uj_search_selecting_first_hotel()  {
         page_Home().wait_for_page().and().search(search_test_data);
-        page_Search_Result().wait_for_page().and().select_deal_of_the_day().and().switch_to_tab(1);
-
-        // Assertion
-        final String actual_url = getDriver().getCurrentUrl();
-        final String expected = "com/XXX_hotel/details.html";
-
-        Assert.assertTrue(actual_url.contains(expected), "URL should contain " + expected + " But was " + actual_url);
-
+        page_Search_Result().wait_for_page().and().select_first_hotel();
+        page_Product_Details().wait_for_page().and().book_room();
+        page_Booking().wait_for_page().and().check_booking_page();
     }
+
+    @Test
+    public void uj_search_random_hotel_with_retry()  {
+        page_Home().wait_for_page().and().search(search_test_data);
+        page_Search_Result().wait_for_page().and().select_random_hotel(search_test_data);
+        page_Product_Details().wait_for_page().and().book_room();
+        page_Booking().wait_for_page().and().check_booking_page();
+    }
+
 
     @AfterMethod (alwaysRun = true)
     public void tearDown(){

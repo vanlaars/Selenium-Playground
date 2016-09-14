@@ -9,11 +9,9 @@
 
     <test name="Selenium test suite">
         <classes>
-            <class name="user_journey.uj_simpleCart" />
-            <!--<class name="variant.advancedPageObjectsTest" />-->
-            <!--<class name="variant.conditions_404" />-->
-            <!--<class name="variant.conditions_test_mvt" />-->
+            <class name="CRMRiskBased" />
         </classes>
+
     </test>
 
 </suite>

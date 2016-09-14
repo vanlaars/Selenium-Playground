@@ -1,24 +1,15 @@
 package page_objects;
 
-import com.relevantcodes.extentreports.ExtentReports;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.LogType;
+import org.junit.Assert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import page_objects.conditions.common.IConditions;
-import page_objects.conditions.homepage.IConditionsHomePage;
-import core.advancedPO.AdvancedPageFactory;
-import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by svanlaar on 24/02/2016.
@@ -26,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class BasePage {
 
     private static WebDriver driver;
+    private List<By> myList;
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
@@ -44,7 +36,7 @@ public class BasePage {
     }
 
     public void type(By element, String txt){
-        this.getDriver().findElement(element).sendKeys(txt);
+        getDriver().findElement(element).sendKeys(txt);
     }
 
     public boolean is_displayed(By element){
@@ -56,7 +48,7 @@ public class BasePage {
     }
 
     public void select(By element, String value){
-        Select dropdown = new Select(driver.findElement(element));
+        Select dropdown = new Select(getDriver().findElement(element));
         dropdown.selectByVisibleText(value);
     }
 
@@ -70,17 +62,18 @@ public class BasePage {
     }
 
     public void wait_for_element(By element){
-        WebDriverWait wait = new WebDriverWait(driver, 60);
+        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(element));
     }
 
-    public void switch_to_tab(int tab){
-        ArrayList<String> tabs2 = new ArrayList<String>(driver.getWindowHandles());
-        driver.switchTo().window(tabs2.get(tab));
+    public void wait_for_window(){
+        WebDriverWait wait = new WebDriverWait(getDriver(), 60);
+        wait.until(WebDriver::getWindowHandles);
     }
 
-    public void send_escape_key(By element){
-        driver.findElement(element).sendKeys(Keys.ESCAPE);
+    public void switch_to_tab(int tab){
+        ArrayList<String> tabs2 = new ArrayList<String>(getDriver().getWindowHandles());
+        getDriver().switchTo().window(tabs2.get(tab));
     }
 
     public static WebDriver getDriver() {
@@ -90,5 +83,21 @@ public class BasePage {
     public String get_page_name(){
         return getClass().getName().toString().replace("page_objects.pages.", "");
     }
+
+    public String get_attribute(By element, String attribute){
+        return getDriver().findElement(element).getAttribute(attribute);
+    }
+
+    public void element_displayed(By element){
+        getDriver().findElement(element).isDisplayed();
+    }
+
+    public By get_random_from_list(List<By> myList) {
+        Assert.assertTrue(myList.size()  > 0 );
+        Random randomizer = new Random();
+        By list_hotels = myList.get(randomizer.nextInt(myList.size()));
+        return list_hotels;
+    }
+
 
 }

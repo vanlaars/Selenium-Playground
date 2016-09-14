@@ -11,14 +11,14 @@ import java.util.Set;
 /**
  * Created by svanlaar on 25/04/2016.
  */
-public class AdvancedPageFactory extends BasePage {
+public class AdvancedPageFactory3 extends BasePage {
 
 
 //    private static WebDriver driver;
     private static Logger logger = Logger.getLogger("AdvancedPageFactory");
 
 
-    public AdvancedPageFactory(WebDriver driver) {
+    public AdvancedPageFactory3(WebDriver driver) {
         super(driver);
     }
 

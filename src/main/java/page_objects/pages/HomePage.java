@@ -3,10 +3,12 @@ package page_objects.pages;
 import com.google.common.base.Stopwatch;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import page_objects.BasePage;
 import core.testdata.SearchTestData;
 import page_objects.conditions.ConditionsBase;
+import ru.yandex.qatools.allure.annotations.Step;
 
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
@@ -24,18 +26,18 @@ public class HomePage extends BasePage {
     private static final By CHECK_IN = By.id("qf-0q-localised-check-in");
     private static final By CHECK_OUT = By.id("qf-0q-localised-check-out");
     private static final By OCCUPANCY = By.id("qf-0q-compact-occupancy");
-    private static final By SEARCH_BUTTON = By.xpath(".//*[@id='main-content']/main/div/div/div[1]/div/div[1]/div[1]/div/div/form/fieldset[5]/button");
+    private static final By CLOSE_AUTOSUGGEST = By.cssSelector(".cta.cta-link");
+    private static final By SEARCH_FORM =  By.xpath(".//*[@id='main-content']//form");
 
 
-
-    private final By search_box = By.id("twotabsearchtextbox");
-    private final ConditionsBase conditions = new ConditionsBase(getDriver());
 
     public HomePage(WebDriver driver) {
         super(driver);
     }
 
+    @Step
     public HomePage wait_for_page(){
+        ConditionsBase conditions = new ConditionsBase(getDriver());
         // for printing the time in MilliSeconds
         final Stopwatch stopwatch = new Stopwatch();
         final Stopwatch stopwatch_home = new Stopwatch();
@@ -50,20 +52,20 @@ public class HomePage extends BasePage {
         return this;
     }
 
-
+    @Step
     public HomePage and(){
         return this;
     }
 
+    @Step
     public HomePage search(SearchTestData data) {
-        type(DESTINATION, data.getDestination() );
-//        send_escape_key(DESTINATION);
-//        clear_field(CHECK_IN);
-//        clear_field(CHECK_OUT);
+        type(DESTINATION, data.getDestination());
+        wait_for_element(CLOSE_AUTOSUGGEST);
+        click(CLOSE_AUTOSUGGEST);
         type(CHECK_IN, data.getCheck_in());
         type(CHECK_OUT, data.getCheck_out());
         select(OCCUPANCY, data.getOccupancy());
-        click(SEARCH_BUTTON);
+        submit(SEARCH_FORM);
         return this;
     }
 

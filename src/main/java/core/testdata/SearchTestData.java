@@ -1,5 +1,7 @@
 package core.testdata;
 
+import org.openqa.selenium.By;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,6 +15,8 @@ public class SearchTestData {
     private String check_out;
     private String check_in;
     private String occupancy;
+    private String hotelName;
+    private String hotelAddress;
 
     public SearchTestData(String destination, int check_out, String occupancy) {
         Calendar cal = Calendar.getInstance();
@@ -54,13 +58,32 @@ public class SearchTestData {
         return date;
     }
 
+    public String getHotelName() {
+        return hotelName;
+    }
+
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
+    }
+
+    public String getHotelAddress() {
+        return hotelAddress;
+    }
+
+    public void setHotelAddress(String hotelAddress) {
+        this.hotelAddress = hotelAddress;
+    }
+
+
     @Override
     public String toString() {
         return "SearchTestData{" +
                 "destination='" + destination + '\'' +
-                ", check_in='" + check_in + '\'' +
                 ", check_out='" + check_out + '\'' +
+                ", check_in='" + check_in + '\'' +
                 ", occupancy='" + occupancy + '\'' +
+                ", hotelName='" + hotelName + '\'' +
+                ", hotelAddress='" + hotelAddress + '\'' +
                 '}';
     }
 }
